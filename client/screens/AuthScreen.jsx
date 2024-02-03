@@ -20,7 +20,7 @@ const AuthScreen = ({ navigation }) => {
 
   const handleRegister = async () => {
     try {
-      const response = await axios.post("https://avez-blog-2023-end.onrender.com/user/signup", {
+      const response = await axios.post("https://rest-api-final-year-project.onrender.com/user/signup", {
         email,
         password,
       });
