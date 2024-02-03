@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const UserModal = require("../models/User");
 
-const secret = "test";
+const secret = 'test';
 
 const signin = async (req, res) => {
   const { email, password } = req.body;
@@ -10,17 +10,13 @@ const signin = async (req, res) => {
   try {
     const oldUser = await UserModal.findOne({ email });
 
-    if (!oldUser)
-      return res.status(404).json({ message: "User doesn't exist" });
+    if (!oldUser) return res.status(404).json({ message: "User doesn't exist" });
 
     const isPasswordCorrect = await bcrypt.compare(password, oldUser.password);
 
-    if (!isPasswordCorrect)
-      return res.status(400).json({ message: "Invalid credentials" });
+    if (!isPasswordCorrect) return res.status(400).json({ message: "Invalid credentials" });
 
-    const token = jwt.sign({ email: oldUser.email, id: oldUser._id }, secret, {
-      expiresIn: "7d",
-    });
+    const token = jwt.sign({ email: oldUser.email, id: oldUser._id }, secret, { expiresIn: "7d" });
 
     res.status(200).json({ result: oldUser, token });
   } catch (err) {
@@ -29,37 +25,33 @@ const signin = async (req, res) => {
 };
 
 const signup = async (req, res) => {
-  const { email, password } = req.body;
+  const { fullName, home, work, mobile, email, password } = req.body;
 
   try {
-    // Check if the user already exists
     const oldUser = await UserModal.findOne({ email });
 
-    if (oldUser) {
-      return res.status(400).json({ message: "User already exists" });
-    }
+    if (oldUser) return res.status(400).json({ message: "User already exists" });
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    // Perform the initial signup
-    const result = await UserModal.create({
+    const result = await User.create({
+      fullName,
+      home,
+      work,
+      mobile,
       email,
       password: hashedPassword,
     });
 
-    const token = jwt.sign({ email: result.email, id: result._id }, secret, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign({ email: result.email, id: result._id }, secret, { expiresIn: "1h" });
 
-    res.status(201).json({ user: result, token });
+    res.status(201).json({ result, token });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
-    console.error(error);
+    console.log(error);
   }
 };
 
-module.exports = signup;
 
 const getUserById = async (req, res) => {
   const { userId } = req.params; // Extract user ID from request parameters
@@ -68,16 +60,14 @@ const getUserById = async (req, res) => {
     const user = await UserModal.findById(userId); // Find user by ID
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: 'User not found' });
     }
 
     // User found, send the user object in the response
     res.status(200).json(user);
   } catch (error) {
-    console.error("Error fetching user by ID:", error);
-    res
-      .status(500)
-      .json({ message: "Failed to fetch user", error: error.message });
+    console.error('Error fetching user by ID:', error);
+    res.status(500).json({ message: 'Failed to fetch user', error: error.message });
   }
 };
 
@@ -90,4 +80,6 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-module.exports = { signin, signup, getAllUsers, getUserById };
+
+
+module.exports = { signin, signup,getAllUsers, getUserById };

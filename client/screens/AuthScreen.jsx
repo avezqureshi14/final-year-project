@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   ImageBackground,
+  ScrollView,
 } from 'react-native';
 import axios from 'axios';
 import { styles } from '../assets/css/login';
@@ -13,8 +14,12 @@ import { signin, signup } from '../contexts/actions/auth';
 
 const AuthScreen = ({ navigation }) => {
   const [currentTab, setCurrentTab] = useState('login');
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [home, setHome] = useState('');
+  const [work, setWork] = useState('');
+  const [mobile, setMobile] = useState('');
   const dispatch = useDispatch();
 
   const handleRedirect = () => {
@@ -24,12 +29,13 @@ const AuthScreen = ({ navigation }) => {
 
   const handleRegister = async () => {
     try {
-      await dispatch(signup({ email, password }));
+      await dispatch(signup({ fullName, email, home, work, mobile, password }));
       handleRedirect();
     } catch (error) {
       console.error('Registration failed', error);
     }
   };
+
   const handleLogin = async () => {
     try {
       await dispatch(signin({ email, password }));
@@ -64,15 +70,53 @@ const AuthScreen = ({ navigation }) => {
     );
   };
 
-  const renderRegistrationFields = () => {
+  const renderRegistrationFieldsStep1 = () => {
     return (
       <>
+        <TextInput
+          style={styles.input}
+          placeholderTextColor="#000"
+          placeholder="Enter your Full Name"
+          value={fullName}
+          onChangeText={(text) => setFullName(text)}
+        />
         <TextInput
           style={styles.input}
           placeholderTextColor="#000"
           placeholder="Enter your Email"
           value={email}
           onChangeText={(text) => setEmail(text)}
+        />
+        <TouchableOpacity onPress={() => setCurrentTab('registrationStep2')}>
+          <Text style={styles.button}>Next</Text>
+        </TouchableOpacity>
+      </>
+    );
+  };
+
+  const renderRegistrationFieldsStep2 = () => {
+    return (
+      <>
+        <TextInput
+          style={styles.input}
+          placeholderTextColor="#000"
+          placeholder="Enter your Home Address"
+          value={home}
+          onChangeText={(text) => setHome(text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholderTextColor="#000"
+          placeholder="Enter your Work Address"
+          value={work}
+          onChangeText={(text) => setWork(text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholderTextColor="#000"
+          placeholder="Enter your Mobile No."
+          value={mobile}
+          onChangeText={(text) => setMobile(text)}
         />
         <TextInput
           style={styles.input}
@@ -87,6 +131,12 @@ const AuthScreen = ({ navigation }) => {
         </TouchableOpacity>
       </>
     );
+  };
+
+  const renderRegistrationFields = () => {
+    return currentTab === 'registrationStep1'
+      ? renderRegistrationFieldsStep1()
+      : renderRegistrationFieldsStep2();
   };
 
   return (
@@ -107,9 +157,14 @@ const AuthScreen = ({ navigation }) => {
                 ? renderLoginFields()
                 : renderRegistrationFields()}
             </View>
+            {currentTab === 'registrationStep2' && (
+              <TouchableOpacity onPress={() => setCurrentTab('registrationStep1')}>
+                <Text style={styles.button}>Back</Text>
+              </TouchableOpacity>
+            )}
             <Text
               onPress={() =>
-                setCurrentTab(currentTab === 'login' ? 'register' : 'login')
+                setCurrentTab(currentTab === 'login' ? 'registrationStep1' : 'login')
               }
               style={styles.switch}
             >

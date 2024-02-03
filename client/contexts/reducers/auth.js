@@ -11,6 +11,14 @@ const authReducer = (state = { authData: null }, action) => {
       }
 
       return { ...state, authData: action.data, loading: false, errors: null };
+      case actionType.UPDATE_DETAILS:
+        try {
+          AsyncStorage.setItem('profile', JSON.stringify({ ...action?.data }));
+        } catch (error) {
+          console.error('AsyncStorage Error:', error);
+        }
+  
+        return { ...state, authData: action.data, loading: false, errors: null };
     case actionType.LOGOUT:
       try {
         AsyncStorage.clear();

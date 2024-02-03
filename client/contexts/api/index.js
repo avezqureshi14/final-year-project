@@ -20,3 +20,4 @@ API.interceptors.request.use(async (config) => {
 
   export const signIn = (formData) => API.post("/user/login", formData);
   export const signUp = (formData) => API.post("/user/signup", formData);
+  export const updateDetails = (formData) => API.put("/user/updateDetails", formData);

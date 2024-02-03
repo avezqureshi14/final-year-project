@@ -94,7 +94,7 @@ const BottomTabNavigator = () => {
   const authData = useSelector((state) => state.auth.authData);
 
   useEffect(() => {
-    authData?.result?.email === undefined ? setAuthenticated(false) :  setAuthenticated(true);
+    authData?.user?.email === undefined ? setAuthenticated(false) :  setAuthenticated(true);
   }, [authData]);
   return (
   <Tab.Navigator
