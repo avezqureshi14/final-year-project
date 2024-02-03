@@ -8,12 +8,12 @@ const HomeScreen = () => {
   useEffect(() => {
     console.log('Fetched Auth Data:', authData);
   }, [authData]);
-  console.log(authData?.user?.email)
+  console.log(authData?.result?.email)
   return (
     <View style={styles.container}>
-      {authData && authData.user ? (
+      {authData && authData.result ? (
         <>
-          <Text style={styles.text}>Welcome, {authData.user.email}!</Text>
+          <Text style={styles.text}>Welcome, {authData.result.email}!</Text>
         </>
       ) : (
         <Text style={styles.text}>User data not found.</Text>

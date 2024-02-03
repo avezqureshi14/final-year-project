@@ -1,10 +1,15 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { useSelector } from 'react-redux';
 
 const ProfileScreen = () => {
   const handleLogin = () => {
     // Logic for login button press
   };
+
+  const authData = useSelector((state) => state.auth.authData?.result);
+
+  console.log(authData)
 
   const handleResetPIN = () => {
     // Logic for reset PIN button press
@@ -19,12 +24,12 @@ const ProfileScreen = () => {
             style={styles.profileImage}
           />
         </View>
-        <Text style={styles.name}>Eliana Doe</Text>
+        <Text style={styles.name}> {authData.fullName} </Text>
         <View style={styles.profileInfo}>
-          <Text>elinadoe@gmail.com</Text>
-          <Text style={styles.text}>Home: Kondhwa, Pune</Text>
-          <Text style={styles.text}>Work: Kondhwa, Pune</Text>
-          <Text style={styles.text}>Mobile: 9890562214</Text>
+          <Text> {authData.email} </Text>
+          <Text style={styles.text}>Home:  {authData.home} </Text>
+          <Text style={styles.text}>Work: {authData.work} </Text>
+          <Text style={styles.text}>Mobile:  {authData.mobile} </Text>
           <View style={styles.profileButtons}>
             <TouchableOpacity onPress={handleLogin} style={styles.button}>
               <Text style={styles.buttonText}>Logout</Text>

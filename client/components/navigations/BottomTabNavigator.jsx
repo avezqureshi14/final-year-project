@@ -94,8 +94,9 @@ const BottomTabNavigator = () => {
   const authData = useSelector((state) => state.auth.authData);
 
   useEffect(() => {
-    authData?.user?.email === undefined ? setAuthenticated(false) :  setAuthenticated(true);
+    authData?.result?.email === undefined ? setAuthenticated(false) :  setAuthenticated(true);
   }, [authData]);
+  console.log(authData)
   return (
   <Tab.Navigator
     tabBar={(props) => <CustomTabBar {...props} />}
