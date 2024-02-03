@@ -34,7 +34,7 @@ const signup = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const result = await User.create({
+    const result = await UserModal.create({
       fullName,
       home,
       work,

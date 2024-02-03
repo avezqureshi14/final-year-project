@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -6,25 +6,25 @@ import {
   TouchableOpacity,
   ImageBackground,
   ScrollView,
-} from 'react-native';
-import axios from 'axios';
-import { styles } from '../assets/css/login';
-import { useDispatch } from 'react-redux';
-import { signin, signup } from '../contexts/actions/auth';
+} from "react-native";
+import axios from "axios";
+import { styles } from "../assets/css/login";
+import { useDispatch } from "react-redux";
+import { signin, signup } from "../contexts/actions/auth";
 
 const AuthScreen = ({ navigation }) => {
-  const [currentTab, setCurrentTab] = useState('login');
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [home, setHome] = useState('');
-  const [work, setWork] = useState('');
-  const [mobile, setMobile] = useState('');
+  const [currentTab, setCurrentTab] = useState("login");
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [home, setHome] = useState("");
+  const [work, setWork] = useState("");
+  const [mobile, setMobile] = useState("");
   const dispatch = useDispatch();
 
   const handleRedirect = () => {
-    navigation.navigate('Home');
-    console.log('Redirecting to home page...');
+    navigation.navigate("Home");
+    console.log("Redirecting to home page...");
   };
 
   const handleRegister = async () => {
@@ -32,7 +32,7 @@ const AuthScreen = ({ navigation }) => {
       await dispatch(signup({ fullName, email, home, work, mobile, password }));
       handleRedirect();
     } catch (error) {
-      console.error('Registration failed', error);
+      console.error("Registration failed", error);
     }
   };
 
@@ -41,7 +41,7 @@ const AuthScreen = ({ navigation }) => {
       await dispatch(signin({ email, password }));
       handleRedirect();
     } catch (error) {
-      console.error('Login failed', error);
+      console.error("Login failed", error);
     }
   };
 
@@ -87,7 +87,7 @@ const AuthScreen = ({ navigation }) => {
           value={email}
           onChangeText={(text) => setEmail(text)}
         />
-        <TouchableOpacity onPress={() => setCurrentTab('registrationStep2')}>
+        <TouchableOpacity onPress={() => setCurrentTab("registrationStep2")}>
           <Text style={styles.button}>Next</Text>
         </TouchableOpacity>
       </>
@@ -111,6 +111,15 @@ const AuthScreen = ({ navigation }) => {
           value={work}
           onChangeText={(text) => setWork(text)}
         />
+        <TouchableOpacity onPress={() => setCurrentTab("registrationStep3")}>
+          <Text style={styles.button}>Next</Text>
+        </TouchableOpacity>
+      </>
+    );
+  };
+  const renderRegistrationFieldsStep3 = () => {
+    return (
+      <>
         <TextInput
           style={styles.input}
           placeholderTextColor="#000"
@@ -134,14 +143,21 @@ const AuthScreen = ({ navigation }) => {
   };
 
   const renderRegistrationFields = () => {
-    return currentTab === 'registrationStep1'
-      ? renderRegistrationFieldsStep1()
-      : renderRegistrationFieldsStep2();
+    switch (currentTab) {
+      case "registrationStep1":
+        return renderRegistrationFieldsStep1();
+      case "registrationStep2":
+        return renderRegistrationFieldsStep2();
+      case "registrationStep3":
+        return renderRegistrationFieldsStep3();
+      default:
+        return null;
+    }
   };
 
   return (
     <ImageBackground
-      source={require('../assets/women.webp')}
+      source={require("../assets/women.webp")}
       style={styles.backgroundImage}
     >
       <View style={styles.container}>
@@ -149,28 +165,34 @@ const AuthScreen = ({ navigation }) => {
           <View style={styles.loginContainer}>
             <View>
               <Text style={styles.heading}>
-                {currentTab === 'login' ? 'Login' : 'Registration'}
+                {currentTab === "login" ? "Login" : "Registration"}
               </Text>
             </View>
             <View>
-              {currentTab === 'login'
+              {currentTab === "login"
                 ? renderLoginFields()
                 : renderRegistrationFields()}
             </View>
-            {currentTab === 'registrationStep2' && (
-              <TouchableOpacity onPress={() => setCurrentTab('registrationStep1')}>
+            {(currentTab === "registrationStep2" ||
+              currentTab === "registrationStep3") && (
+              <TouchableOpacity
+                onPress={() => setCurrentTab("registrationStep1")}
+              >
                 <Text style={styles.button}>Back</Text>
               </TouchableOpacity>
             )}
+
             <Text
               onPress={() =>
-                setCurrentTab(currentTab === 'login' ? 'registrationStep1' : 'login')
+                setCurrentTab(
+                  currentTab === "login" ? "registrationStep1" : "login"
+                )
               }
               style={styles.switch}
             >
-              {currentTab === 'login'
+              {currentTab === "login"
                 ? "Don't have an account, Register"
-                : 'Already have an account, Login'}
+                : "Already have an account, Login"}
             </Text>
           </View>
         </View>
