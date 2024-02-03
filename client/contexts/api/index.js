@@ -1,6 +1,22 @@
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios"
 
-const API = axios.create({baseURL:"http://localhost:8800/"});
+const API = axios.create({baseURL:"https://rest-api-final-year-project.onrender.com/"});
 
-// export const fetchPosts = () => axios.get("https://api.tvmaze.com/search/shows?q=death")
-export const fetchPosts = () => axios.get("https://avez-blog-2023-end.onrender.com/blogs")
+API.interceptors.request.use(async (config) => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    } catch (error) {
+      console.error('AsyncStorage Error:', error);
+      return Promise.reject(error);
+    }
+  });
+
+
+  export const signIn = (formData) => API.post("/user/login", formData);
+  export const signUp = (formData) => API.post("/user/signup", formData);

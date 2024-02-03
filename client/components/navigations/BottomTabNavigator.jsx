@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-vector-icons/Ionicons";
 // Import your screen components
@@ -9,6 +9,7 @@ import LocationScreen from "../../screens/LocationScreen";
 import AuthScreen from "../../screens/AuthScreen";
 import { View, TouchableOpacity, Text } from "react-native";
 import ProfileScreen from "../../screens/ProfileScreen";
+import { useSelector } from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 
@@ -88,7 +89,14 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
   );
 };
 
-const BottomTabNavigator = () => (
+const BottomTabNavigator = () => {
+  const [authenticated, setAuthenticated] = useState(false);
+  const authData = useSelector((state) => state.auth.authData);
+
+  useEffect(() => {
+    authData?.result?.email === undefined ? setAuthenticated(false) :  setAuthenticated(true);
+  }, [authData]);
+  return (
   <Tab.Navigator
     tabBar={(props) => <CustomTabBar {...props} />}
     tabBarOptions={{ activeTintColor: "#FF6347", inactiveTintColor: "#888888" }}
@@ -104,7 +112,7 @@ const BottomTabNavigator = () => (
     />
     <Tab.Screen
       name="Contacts"
-      component={AuthScreen}
+      component={ContactsScreen}
       options={{
         tabBarLabel: "",
         tabBarIconName: "call-outline",
@@ -129,16 +137,21 @@ const BottomTabNavigator = () => (
         headerShown: false,
       }}
     />
-    <Tab.Screen
-      name="Profile"
-      component={ProfileScreen}
-      options={{
-        tabBarLabel: "",
-        tabBarIconName: "person-outline",
-        headerShown: false,
-      }}
-    />
+   {authenticated ? (
+        <Tab.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={{ tabBarLabel: "", tabBarIconName: "person-outline", headerShown: false }}
+        />
+      ) : (
+        <Tab.Screen
+          name="Auth"
+          component={AuthScreen}
+          options={{ tabBarLabel: "", tabBarIconName: "person-outline", headerShown: false }}
+        />
+      )}
   </Tab.Navigator>
-);
+  )
+}
 
-export default BottomTabNavigator;
+export default BottomTabNavigator
