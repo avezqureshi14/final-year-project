@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert, FlatList } from 'react-native';
 import * as Contacts from 'expo-contacts';
-
+import addContacts from "../contexts/actions/contact"
 const ContactScreen = () => {
   const [contacts, setContacts] = useState([]);
   const [error, setError] = useState(undefined);
   const [contactsFetched, setContactsFetched] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
-  console.log(selectedContact)
   const fetchContacts = async () => {
     try {
       const { status } = await Contacts.requestPermissionsAsync();
@@ -33,12 +32,19 @@ const ContactScreen = () => {
     }
   };
 
-  const sendAlert = () => {
+  const sendAlert = async() => {
     if (!selectedContact) {
       Alert.alert('No Contact Selected', 'Please select a contact before sending an alert');
       return;
     }
 
+    try {
+      await addContacts(selectedContact);
+      Alert.alert('Contact Added', 'Selected contact has been added to the database');
+    } catch (error) {
+      console.error('Error adding contact to the database:', error);
+      Alert.alert('Error', 'Failed to add the contact to the database');
+    }
     // Store the selected contact in another hook or perform any other action with it
     // Example: setAnotherHook(selectedContact);
 
@@ -68,7 +74,7 @@ const ContactScreen = () => {
           style={[styles.button, { backgroundColor: '#c83564' }]}
         >
           <Text style={styles.buttonText}>
-            {contactsFetched ? 'Send Alert' : 'Import Contacts'}
+            {contactsFetched ? 'Add Selected Contacts' : 'Import Contacts'}
           </Text>
         </TouchableOpacity>
       </View>
