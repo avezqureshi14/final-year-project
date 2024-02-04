@@ -2,10 +2,10 @@ const Contact = require('../models/Contacts'); // Import the Contact model
 
 const saveContacts = async (req, res) => {
   try {
-    const contactsData = req.body; 
-    const savedContacts = new Contact(contactsData);
-    await savedContacts.save(); // Fix the variable name here
-    res.status(201).json(savedContacts);
+    const { contact } = req.body; // Fix the variable name here
+    const savedContact = new Contact(contact);
+    await savedContact.save();
+    res.status(201).json(savedContact);
   } catch (error) {
     console.error('Error saving contacts:', error);
     res.status(500).json({ message: 'Internal Server Error' });
