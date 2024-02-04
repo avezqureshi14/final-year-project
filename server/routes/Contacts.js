@@ -3,5 +3,5 @@ const contactsRouter = express.Router();
 const contactsController = require("../controllers/Contacts");
 
 // Create a new blog
-contactsRouter.post("/login", contactsController.saveContacts);
+contactsRouter.post("/add", contactsController.saveContacts);
 module.exports = contactsRouter;

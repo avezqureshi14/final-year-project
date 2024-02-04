@@ -8,5 +8,6 @@ export const COMMENT = 'COMMENT';
 export const AUTH = 'AUTH';
 export const LOGOUT = 'LOGOUT';
 export const UPDATE_DETAILS = 'UPDATE_DETAILS';
+export const ADD_CONTACTS = 'ADD_CONTACTS';
 export const TOGGLE_BOOKMARK = 'TOGGLE_BOOKMARK';
 export const FETCH_BOOKMARKS = 'FETCH_BOOKMARKS';

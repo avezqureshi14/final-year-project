@@ -1,19 +1,9 @@
 const mongoose = require('mongoose');
 
 const contactSchema = new mongoose.Schema({
-  birthday: Date,
-  emails: [
+  contacts: [
     {
-      label: String,
-      email: String,
-    },
-  ],
-  firstName: String,
-  lastName: String,
-  phoneNumbers: [
-    {
-      label: String,
-      number: String,
+      type: String,
     },
   ],
 });
