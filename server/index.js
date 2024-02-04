@@ -7,7 +7,7 @@ const contactsRouter = require('./routes/Contacts');
 const app = express();
 app.use(cors());
 app.use(bodyParser.json()); 
-app.use(bodyParser.json({ limit: '10mb' })); 
+app.use(bodyParser.json({ limit: '50mb', extended:true })); 
 connectToDatabase();
 app.use("/user",userRouter);
 app.use("/contacts",contactsRouter);
