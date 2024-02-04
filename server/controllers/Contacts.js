@@ -1,9 +1,18 @@
-const Contact = require("../models/Contacts"); // Import the Contact model
+const Contact = require("../models/Contacts");
 
 const saveContacts = async (req, res) => {
   try {
-    const { firstName, lastName, phoneNumber } = req.body; // Fix the variable name here
-    const savedContact = new Contact({ firstName, lastName, phoneNumber });
+    const { firstName, lastName, phoneNumber } = req.body;
+
+    // Create a new contact with the fields that are provided, allowing for undefined values
+    const contactData = {
+      firstName: firstName || "",
+      lastName: lastName || "",
+      phoneNumber: phoneNumber || "",
+    };
+
+    const savedContact = new Contact(contactData);
+
     await savedContact.save();
     res.status(201).json(savedContact);
   } catch (error) {
@@ -12,4 +21,14 @@ const saveContacts = async (req, res) => {
   }
 };
 
-module.exports = { saveContacts };
+const getContacts = async (req, res) => {
+  try {
+    const contacts = await Contact.find();
+    res.status(200).json(contacts);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { saveContacts, getContacts };

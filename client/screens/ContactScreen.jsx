@@ -18,7 +18,7 @@ const ContactScreen = () => {
   const dispatch = useDispatch();
   const firstName = selectedContact?.firstName || "";
   const lastName = selectedContact?.lastName || "";
-
+  // firstName, lastName, phoneNumber 
   let phoneNumber = "";
   if (selectedContact && selectedContact.phoneNumbers) {
     const phoneNumbers = selectedContact.phoneNumbers.map(
@@ -33,7 +33,7 @@ const ContactScreen = () => {
     phoneNumber: phoneNumber,
   };
 
-  console.log(contactObject);
+  // console.log(contactObject);
 
   const fetchContacts = async () => {
     try {
@@ -69,7 +69,7 @@ const ContactScreen = () => {
     }
 
     try {
-      await dispatch(addContacts({ contactObject }));
+      await dispatch(addContacts(contactObject));
       Alert.alert(
         "Contact Added",
         "Selected contact has been added to the database"
@@ -90,6 +90,12 @@ const ContactScreen = () => {
     );
   };
 
+  const addContactsdb = async(item) =>{
+    setSelectedContact(item);
+    console.log(contactObject)
+    await dispatch(addContacts(contactObject));
+  }
+
   const renderContact = ({ item }) => {
     return (
       <TouchableOpacity
@@ -99,7 +105,7 @@ const ContactScreen = () => {
             ? styles.selectedCard
             : null,
         ]}
-        onPress={() => setSelectedContact(item)}
+        onPress={() => addContactsdb(item)}
       >
         <Text style={styles.contactName}>
           {item.firstName} {item.lastName}
