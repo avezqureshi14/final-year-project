@@ -25,7 +25,7 @@ const ContactScreen = () => {
         if (data.length > 0) {
           setContacts(data);
           setContactsFetched(true);
-          dispatch(addContacts(contacts)); // Dispatch the action with fetched contacts
+          dispatch(addContacts(data)); // Dispatch the action with fetched contacts
         }
       } else {
         setError('Permission to access contacts denied');
