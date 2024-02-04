@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert, FlatList } from 'react-native';
 import * as Contacts from 'expo-contacts';
-import addContacts from "../contexts/actions/contact"
+import {addContacts} from "../contexts/actions/contact"
 const ContactScreen = () => {
   const [contacts, setContacts] = useState([]);
   const [error, setError] = useState(undefined);
   const [contactsFetched, setContactsFetched] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
+
+  console.log(selectedContact.firstName)
   const fetchContacts = async () => {
     try {
       const { status } = await Contacts.requestPermissionsAsync();
       if (status === 'granted') {
         const { data } = await Contacts.getContactsAsync({
           fields: [
-            Contacts.Fields.Birthday,
             Contacts.Fields.Emails,
             Contacts.Fields.FirstName,
             Contacts.Fields.LastName,
